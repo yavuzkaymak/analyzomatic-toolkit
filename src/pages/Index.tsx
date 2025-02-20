@@ -33,27 +33,29 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto py-8">
-        <header className="mb-8">
+      <div className="container mx-auto py-8 max-w-5xl">
+        <header className="mb-8 text-center">
           <h1 className="text-4xl font-bold tracking-tight">Document Analysis</h1>
           <p className="text-muted-foreground mt-2">
             Upload documents and ask questions about them
           </p>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div>
+        <div className="flex flex-col items-center gap-8">
+          <div className="w-full max-w-2xl">
+            <div className="bg-card rounded-lg shadow-sm h-[600px] flex flex-col">
+              <ChatInterface
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                onFileUpload={handleFileUpload}
+              />
+            </div>
+          </div>
+          
+          <div className="w-full max-w-3xl">
             {documents && (
               <DocumentPreview content={documents} highlights={highlights} />
             )}
-          </div>
-          
-          <div className="bg-card rounded-lg shadow-sm h-[600px] flex flex-col">
-            <ChatInterface
-              messages={messages}
-              onSendMessage={handleSendMessage}
-              onFileUpload={handleFileUpload}
-            />
           </div>
         </div>
       </div>
