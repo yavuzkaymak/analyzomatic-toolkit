@@ -41,7 +41,7 @@ const Index = () => {
           </p>
         </header>
 
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex justify-center gap-8 relative">
           <div className="w-full max-w-2xl">
             <div className="bg-card rounded-lg shadow-sm h-[600px] flex flex-col">
               <ChatInterface
@@ -52,11 +52,11 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="w-full max-w-3xl">
-            {documents && (
+          {documents && (
+            <div className="fixed right-8 top-[140px] w-[400px] max-h-[calc(100vh-180px)] overflow-y-auto animate-fade-in">
               <DocumentPreview content={documents} highlights={highlights} />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
