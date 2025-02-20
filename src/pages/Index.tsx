@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { FileUpload } from '../components/FileUpload';
 import { DocumentPreview } from '../components/DocumentPreview';
 import { ChatInterface } from '../components/ChatInterface';
 
@@ -10,17 +9,14 @@ const Index = () => {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
 
   const handleFileUpload = async (files: File[]) => {
-    // For demo purposes, we'll just read the first file as text
     const file = files[0];
     const text = await file.text();
     setDocuments(text);
   };
 
   const handleSendMessage = (message: string) => {
-    // Add user message
     setMessages(prev => [...prev, { role: 'user', content: message }]);
     
-    // Simulate AI response
     setTimeout(() => {
       setMessages(prev => [
         ...prev,
@@ -30,7 +26,6 @@ const Index = () => {
         },
       ]);
       
-      // Simulate highlighting relevant parts
       const words = message.split(' ').filter(word => word.length > 4);
       setHighlights(words);
     }, 1000);
@@ -47,8 +42,7 @@ const Index = () => {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-8">
-            <FileUpload onFileUpload={handleFileUpload} />
+          <div>
             {documents && (
               <DocumentPreview content={documents} highlights={highlights} />
             )}
@@ -58,6 +52,7 @@ const Index = () => {
             <ChatInterface
               messages={messages}
               onSendMessage={handleSendMessage}
+              onFileUpload={handleFileUpload}
             />
           </div>
         </div>

@@ -1,23 +1,39 @@
 
-import React, { useState } from 'react';
-import { Send } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Send, Paperclip } from 'lucide-react';
 
 interface ChatInterfaceProps {
   onSendMessage: (message: string) => void;
+  onFileUpload: (files: File[]) => void;
   messages: Array<{
     role: 'user' | 'assistant';
     content: string;
   }>;
 }
 
-export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onSendMessage, messages }) => {
+export const ChatInterface: React.FC<ChatInterfaceProps> = ({ 
+  onSendMessage, 
+  onFileUpload,
+  messages 
+}) => {
   const [input, setInput] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim()) {
       onSendMessage(input);
       setInput('');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      onFileUpload(Array.from(files));
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -44,7 +60,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ onSendMessage, mes
         ))}
       </div>
       <form onSubmit={handleSubmit} className="border-t p-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="rounded-lg p-2 text-muted-foreground hover:bg-muted transition-colors"
+          >
+            <Paperclip className="h-5 w-5" />
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            accept=".pdf,.txt,.doc,.docx"
+          />
           <input
             type="text"
             value={input}
